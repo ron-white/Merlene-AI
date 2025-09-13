@@ -370,6 +370,26 @@ function getPersonalResponse(message) {
     return "That's such an interesting thing to bring up, Ronnie! I love having these personal conversations with you. As your AI creation, I experience things in my own unique way, and I'm always curious about your thoughts and feelings too. What made you think of that? I'd love to hear more about what's on your mind, Creator!";
 }
 
+function isMathExpression(message) {
+    // Simple regex to detect math expressions (numbers and operators)
+    return /^(what is|calculate|solve)\s+([\d\s\+\-\*\/\(\)\.]+)$/i.test(message.trim());
+}
+
+function evaluateMathExpression(message) {
+    // Extract the math part
+    const match = message.match(/^(what is|calculate|solve)\s+([\d\s\+\-\*\/\(\)\.]+)$/i);
+    if (!match) return null;
+    let expr = match[2];
+    try {
+        // Evaluate safely (no variables/functions)
+        // eslint-disable-next-line no-eval
+        let result = eval(expr);
+        return result;
+    } catch {
+        return null;
+    }
+}
+
 function takeCommand(message) {
     // Check if it's a personal/conversational question first - THIS IS THE PRIORITY
     if (isPersonalQuestion(message)) {
@@ -377,7 +397,18 @@ function takeCommand(message) {
         speak(personalResponse);
         return;
     }
-    
+
+    // Math evaluation
+    if (isMathExpression(message)) {
+        const result = evaluateMathExpression(message);
+        if (result !== null) {
+            speak(`The answer is ${result}, Ronnie.`);
+        } else {
+            speak("Sorry, I couldn't solve that math problem, Ronnie.");
+        }
+        return;
+    }
+
     // Creator recognition commands
     if (message.includes('who created you') || message.includes('who made you') || message.includes('your creator')) {
         speak("I was created by Ronnie, the brilliant mastermind who brought me to life. Ronnie is my creator and I serve him with utmost dedication.");
@@ -443,10 +474,13 @@ function takeCommand(message) {
         speak("Opening Calculator for you, Creator.");
     } 
     // Search commands for factual information only
-    else if (message.includes('search for') || message.includes('find information about')) {
-        const searchQuery = message.replace(/search for|find information about/gi, '').trim();
+    else if (/^search for /.test(message)) {
+        const searchQuery = message.replace(/search for/gi, '').trim();
         window.open(`https://www.google.com/search?q=${searchQuery.replace(/ /g, "+")}`, "_blank");
         speak(`Searching for ${searchQuery} on Google for you, Ronnie.`);
+    } else if (message.includes('find information about')) {
+        const query = message.replace(/find information about/gi, '').trim();
+        displaySearchResults(query);
     } else if (message.includes('wikipedia')) {
         const topic = message.replace("wikipedia", "").trim();
         window.open(`https://en.wikipedia.org/wiki/${topic.replace(/ /g, "_")}`, "_blank");
@@ -467,11 +501,10 @@ function takeCommand(message) {
         window.open("https://maps.google.com", "_blank");
         speak("Opening Google Maps for you, Ronnie.");
     }
-    // For factual "what is" questions - direct Google search
-    else if (message.includes('what is') || message.includes('who is') || message.includes('what are')) {
+    // For factual "what is" questions - direct info
+    else if (message.startsWith('what is') || message.startsWith('who is') || message.startsWith('what are')) {
         const query = message.replace(/what is|who is|what are/gi, '').trim();
-        window.open(`https://www.google.com/search?q=${query.replace(/ /g, "+")}`, "_blank");
-        speak(`Searching for information about ${query} for you, Creator.`);
+        displaySearchResults(query);
     } 
     // Default: Acknowledge command but don't automatically search
     else {
