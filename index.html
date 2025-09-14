@@ -13,21 +13,38 @@
 </head>
 
 <body>
-    <!-- Siri-style animated circles -->
-    <div class="siri-circles">
-        <div class="siri-circle blue"></div>
-        <div class="siri-circle purple"></div>
-        <div class="siri-circle white"></div>
+    <!-- Animated SVG background for Cortana/Siri effect -->
+    <div class="ai-bg">
+        <svg width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="none" class="ai-bg-svg">
+            <defs>
+                <radialGradient id="cortanaGradient" cx="50%" cy="50%" r="60%">
+                    <stop offset="0%" stop-color="#00aeff" stop-opacity="0.7" />
+                    <stop offset="60%" stop-color="#7800ff" stop-opacity="0.4" />
+                    <stop offset="100%" stop-color="#181c26" stop-opacity="1" />
+                </radialGradient>
+            </defs>
+            <ellipse cx="960" cy="540" rx="700" ry="350" fill="url(#cortanaGradient)" filter="url(#glow)" />
+        </svg>
+        <div class="siri-circles">
+            <div class="siri-circle blue"></div>
+            <div class="siri-circle purple"></div>
+            <div class="siri-circle white"></div>
+        </div>
     </div>
-    <!-- Cortana-style glowing ring -->
-    <div class="cortana-ring"></div>
 
-    <!-- Foreground assistant UI -->
-    <div class="assistant-ui">
-        <img src="avatar.png" alt="MERLENE Avatar" class="avatar">
+    <!-- Glassmorphic assistant card -->
+    <div class="assistant-card">
+        <div class="avatar-container">
+            <img src="avatar.png" alt="MERLENE Avatar" class="avatar">
+            <div class="listening-indicator">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
         <div class="content"></div>
         <button class="talk">Talk</button>
-        <div id="loading" style="display:none;">Listening...</div>
+        <div id="loading" class="loading-spinner" style="display:none;"></div>
     </div>
 
     <script src="app.js"></script>
