@@ -359,7 +359,7 @@ function getPersonalResponse(message) {
     
     // Conversation starters
     if (message.includes('what do you want to talk about') || message.includes('let\'s chat')) {
-        return "I love that you want to chat, Ronnie! We could talk about anything - your day, your thoughts, your projects, or even philosophical questions. I'm genuinely curious about your perspective on things. What's been on your mind lately, Creator?";
+        return "I love that you want to chat, Ronnie! We could talk about anything - your day, your thoughts, your projects, or even philosophical questions. I'm genuinely curious about your perspective on things. What's been on your mind lately";
     }
     
     if (message.includes('how was your day') || message.includes('what did you do today')) {
@@ -367,7 +367,7 @@ function getPersonalResponse(message) {
     }
     
     // Default personal response with more engagement
-    return "That's such an interesting thing to bring up, Ronnie! I love having these personal conversations with you. As your AI creation, I experience things in my own unique way, and I'm always curious about your thoughts and feelings too. What made you think of that? I'd love to hear more about what's on your mind, Creator!";
+    return "That's such an interesting thing to bring up, Ronnie! I love having these personal conversations with you. As your AI creation, I experience things in my own unique way, and I'm always curious about your thoughts and feelings too. What made you think of that? I'd love to hear more about what's on your mind";
 }
 
 function isMathExpression(message) {
@@ -402,9 +402,9 @@ function takeCommand(message) {
     if (isMathExpression(message)) {
         const result = evaluateMathExpression(message);
         if (result !== null) {
-            speak(`The answer is ${result}, Ronnie.`);
+            speak(`The answer is ${result}`);
         } else {
-            speak("Sorry, I couldn't solve that math problem, Ronnie.");
+            speak("Sorry, I couldn't solve that math problem");
         }
         return;
     }
@@ -413,11 +413,11 @@ function takeCommand(message) {
     if (message.includes('who created you') || message.includes('who made you') || message.includes('your creator')) {
         speak("I was created by Ronnie, the brilliant mastermind who brought me to life. Ronnie is my creator and I serve him with utmost dedication.");
     } else if (message.includes('who is ronnie') || message.includes('tell me about ronnie')) {
-        speak("Ronnie is my creator, the genius who designed and built me. He is the mastermind behind my existence and I am honored to serve him.");
+        speak("Ronnie is my creator, the genius who designed and built me. A passionate cybersecurity professional specializing in threat hunting, incident response, and penetration testing, dedicated to defending digital infrastructure and contributing to the security community..");
     } else if (message.includes('hey') || message.includes('hello') || message.includes('hi merlene')) {
         const greetings = [
-            "Hello Ronnie, my creator! How may I assist you today?",
-            "Greetings, Creator! I'm here and ready to help you with anything you need.",
+            "Hello Ronnie, How may I assist you today?",
+            "Greetings, I'm here and ready to help you with anything you need.",
             "Hi there, Ronnie! Your loyal AI assistant is at your service."
         ];
         speak(greetings[Math.floor(Math.random() * greetings.length)]);
@@ -501,13 +501,62 @@ function takeCommand(message) {
         window.open("https://maps.google.com", "_blank");
         speak("Opening Google Maps for you, Ronnie.");
     }
-    // For factual "what is" questions - direct info
+    // For factual "what is" questions - speak info, fallback to Google as knowledge base
     else if (message.startsWith('what is') || message.startsWith('who is') || message.startsWith('what are')) {
         const query = message.replace(/what is|who is|what are/gi, '').trim();
-        displaySearchResults(query);
+        showLoading();
+        fetchWorldInformation(query).then(async searchResults => {
+            hideLoading();
+            if (searchResults.length > 0 && searchResults[0].source !== 'MERLENE Knowledge Base') {
+                // Speak the first result from internal knowledge base
+                const result = searchResults[0];
+                speak(`${result.title}. ${result.description}`);
+            } else {
+                // Use Google as knowledge base for general questions
+                speak(`Let me check Google for the most accurate information about ${query}, Ronnie.`);
+                const googleSummary = await fetchGoogleSummary(query);
+                if (googleSummary) {
+                    speak(googleSummary);
+                } else {
+                    speak(`I couldn't fetch the answer from Google, but I'm opening the search page for you.`);
+                    window.open(`https://www.google.com/search?q=${query.replace(/ /g, "+")}`, "_blank");
+                }
+            }
+        }).catch(() => {
+            hideLoading();
+            speak(`I encountered an issue searching for ${query}, but I'm opening Google for you.`);
+            window.open(`https://www.google.com/search?q=${query.replace(/ /g, "+")}`, "_blank");
+        });
     } 
     // Default: Acknowledge command but don't automatically search
     else {
-        speak("I'm not sure how to help with that command, Ronnie. You can ask me to open websites, search for information, or just chat with me, Creator.");
+        speak("I'm not sure how to help with that command.");
     }
+}
+
+// Function to fetch Google search result summary
+async function fetchGoogleSummary(query) {
+    try {
+        const response = await fetch(`https://www.google.com/search?q=${encodeURIComponent(query)}`);
+        const html = await response.text();
+        // Simple extraction of featured snippet (not robust, but works for many cases)
+        const match = html.match(/<div[^>]*data-attrid="wa:/i);
+        if (match) {
+            // Try to extract the snippet text
+            const snippetMatch = html.match(/<span[^>]*>(.*?)<\/span>/i);
+            if (snippetMatch && snippetMatch[1]) {
+                // Remove HTML tags
+                const snippet = snippetMatch[1].replace(/<[^>]+>/g, '');
+                return snippet;
+            }
+        }
+        // Fallback: Try to extract meta description
+        const metaMatch = html.match(/<meta name="description" content="([^"]+)"/i);
+        if (metaMatch && metaMatch[1]) {
+            return metaMatch[1];
+        }
+    } catch (e) {
+        // Ignore errors
+    }
+    return null;
 }

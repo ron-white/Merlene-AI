@@ -6,6 +6,16 @@
     font-family: "Roboto Mono", monospace;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', 'San Francisco', Arial, sans-serif;
+    background: radial-gradient(ellipse at center, #232a3b 0%, #181c26 100%);
+    overflow: hidden;
+    position: relative;
+}
+
 .main {
     min-height: 100vh;
     position: relative;
@@ -78,6 +88,71 @@
     color: #aed0d0;
     font-size: 15px;
     margin-right: 20px;
+}
+
+/* Siri-style animated circles */
+.siri-circles {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+}
+.siri-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: pulse 2.5s infinite ease-in-out;
+}
+.siri-circle.blue {
+    background: rgba(0, 174, 255, 0.4);
+    box-shadow: 0 0 60px 20px #00aeff;
+    width: 300px;
+    height: 300px;
+    left: -150px;
+    top: -150px;
+    animation-delay: 0s;
+}
+.siri-circle.purple {
+    background: rgba(120, 0, 255, 0.3);
+    box-shadow: 0 0 80px 30px #7800ff;
+    width: 400px;
+    height: 400px;
+    left: -200px;
+    top: -200px;
+    animation-delay: 1s;
+}
+.siri-circle.white {
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 0 100px 40px #fff;
+    width: 500px;
+    height: 500px;
+    left: -250px;
+    top: -250px;
+    animation-delay: 2s;
+}
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.7; }
+}
+
+/* Cortana-style glowing ring */
+.cortana-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 8px solid rgba(0,174,255,0.7);
+    box-shadow: 0 0 60px 20px #00aeff, 0 0 120px 40px #7800ff;
+    z-index: 1;
+    animation: cortana-glow 3s infinite alternate;
+}
+@keyframes cortana-glow {
+    0% { box-shadow: 0 0 60px 20px #00aeff, 0 0 120px 40px #7800ff; }
+    100% { box-shadow: 0 0 100px 40px #00aeff, 0 0 180px 60px #7800ff; }
 }
 
 /* Search Results Display */
