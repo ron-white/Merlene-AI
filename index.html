@@ -13,36 +13,23 @@
 </head>
 
 <body>
-    <section class="main">
-        <div class="image-container">
-            <div class="image">
-                <img src="giphy.gif" alt="image">
-            </div>
-            <h1>M E R L E N E</h1>
-            <p>I'm your Virtual Assistant MERLENE, created by Ronnie. How may I help you, Creator?</p>
-        </div>
-        <div class="input">
-            <button class="talk"><i class="fas fa-microphone-alt"></i></button>
-            <h1 class="content"> Click here to speak</h1>
-        </div>
-        
-        <!-- Search Results Display Area -->
-        <div class="search-results" id="searchResults">
-            <div class="results-header">
-                <h2>Search Results</h2>
-                <button class="close-results" onclick="closeResults()">×</button>
-            </div>
-            <div class="results-content" id="resultsContent">
-                <!-- Search results will be displayed here -->
-            </div>
-        </div>
-        
-        <!-- Loading indicator -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>MERLENE is searching the world's information for you, Ronnie...</p>
-        </div>
-    </section>
+    <!-- Siri-style animated circles -->
+    <div class="siri-circles">
+        <div class="siri-circle blue"></div>
+        <div class="siri-circle purple"></div>
+        <div class="siri-circle white"></div>
+    </div>
+    <!-- Cortana-style glowing ring -->
+    <div class="cortana-ring"></div>
+
+    <!-- Foreground assistant UI -->
+    <div class="assistant-ui">
+        <img src="avatar.png" alt="MERLENE Avatar" class="avatar">
+        <div class="content"></div>
+        <button class="talk">Talk</button>
+        <div id="loading" style="display:none;">Listening...</div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 

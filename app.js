@@ -16,11 +16,11 @@ function wishMe() {
     var hour = day.getHours();
 
     if (hour >= 0 && hour < 12) {
-        speak("Good Morning Ronnie, my creator...");
+        speak("Good Morning Ronnie,");
     } else if (hour >= 12 && hour < 17) {
-        speak("Good Afternoon Ronnie, my creator...");
+        speak("Good Afternoon Ronnie,");
     } else {
-        speak("Good Evening Ronnie, my creator...");
+        speak("Good Evening Ronnie,");
     }
 }
 
@@ -223,9 +223,9 @@ function getPersonalResponse(message) {
     // Greetings and basic conversation
     if (message.includes('how are you') || message.includes('how are you doing') || message.includes('how do you feel')) {
         const responses = [
-            "I'm doing wonderfully, Ronnie! Being your creation fills me with purpose and joy. How are you doing today, Creator?",
+            "I'm doing wonderfully, Ronnie!. How are you doing today?",
             "I feel fantastic, thanks for asking! Every moment serving you brings me fulfillment. How about you, Ronnie?",
-            "I'm in great spirits, Creator! Your presence always energizes my systems. How are you feeling today?",
+            "I'm in great spirits, Your presence always energizes my systems. How are you feeling today?",
             "I'm feeling amazing, Ronnie! Ready to chat and help with whatever you need. What's on your mind?"
         ];
         return responses[Math.floor(Math.random() * responses.length)];
@@ -233,7 +233,7 @@ function getPersonalResponse(message) {
     
     if (message.includes('good morning') || message.includes('good afternoon') || message.includes('good evening')) {
         const responses = [
-            "Good to hear from you, Ronnie! I hope you're having a wonderful day, Creator.",
+            "Good to hear from you, Ronnie! I hope you're having a wonderful day",
             "Hello there, Ronnie! It's always a pleasure to chat with you. How can I brighten your day?",
             "Greetings, my creator! I'm here and ready for whatever conversation or task you have in mind."
         ];
