@@ -10,74 +10,34 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    font-family: 'Segoe UI', 'San Francisco', Arial, sans-serif;
-    background: #181c26;
+    font-family: 'Garamond', 'Segoe UI', 'San Francisco', Arial, sans-serif;
+    background: url('merlenebg.jpg') center center/cover no-repeat fixed;
     overflow: hidden;
     position: relative;
 }
 
-.ai-bg {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-}
-.ai-bg-svg {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    left: 0; top: 0;
-    z-index: 0;
+.ai-bg, .ai-bg-svg {
+    display: none !important;
 }
 
-.siri-circles {
+.merlene-title {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-}
-.siri-circle {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.5;
-    animation: pulse 2.5s infinite ease-in-out;
-}
-.siri-circle.blue {
-    background: rgba(0, 174, 255, 0.4);
-    box-shadow: 0 0 60px 20px #00aeff;
-    width: 300px;
-    height: 300px;
-    left: -150px;
-    top: -150px;
-    animation-delay: 0s;
-}
-.siri-circle.purple {
-    background: rgba(120, 0, 255, 0.3);
-    box-shadow: 0 0 80px 30px #7800ff;
-    width: 400px;
-    height: 400px;
-    left: -200px;
-    top: -200px;
-    animation-delay: 1s;
-}
-.siri-circle.white {
-    background: rgba(255,255,255,0.1);
-    box-shadow: 0 0 100px 40px #fff;
-    width: 500px;
-    height: 500px;
-    left: -250px;
-    top: -250px;
-    animation-delay: 2s;
-}
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 0.7; }
+    left: 10vw;
+    transform: translateY(-50%);
+    font-family: 'Garamond', serif;
+    font-size: 4rem;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: 0.1em;
+    text-shadow: 0 2px 16px #000a, 0 0 32px #00aeff99;
+    z-index: 20;
+    user-select: none;
 }
 
 .assistant-card {
     position: absolute;
-    top: 50%; left: 50%;
+    top: 50%; left: 55vw;
     transform: translate(-50%, -50%);
     background: rgba(34, 40, 59, 0.7);
     box-shadow: 0 8px 32px 0 rgba(0, 174, 255, 0.25), 0 1.5px 8px 0 #7800ff44;
