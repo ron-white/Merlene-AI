@@ -31,21 +31,6 @@ window.addEventListener('load', () => {
     wishMe();
 });
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-
-recognition.onresult = (event) => {
-    const currentIndex = event.resultIndex;
-    const transcript = event.results[currentIndex][0].transcript;
-    content.textContent = transcript;
-    takeCommand(transcript.toLowerCase());
-};
-
-btn.addEventListener('click', () => {
-    content.textContent = "Listening...";
-    recognition.start();
-});
-
 // Function to show loading indicator
 function showLoading() {
     document.getElementById('loading').style.display = 'block';
@@ -392,7 +377,14 @@ function evaluateMathExpression(message) {
     }
 }
 
+// Expose takeCommand globally for index.html
+window.takeCommand = takeCommand;
+
+// Remove speech recognition and button logic from app.js (handled in index.html)
+// Add debugging output to verify takeCommand is called
 function takeCommand(message) {
+    console.log('takeCommand called with:', message); // Debugging output
+
     // Check if it's a personal/conversational question first - THIS IS THE PRIORITY
     if (isPersonalQuestion(message)) {
         const personalResponse = getPersonalResponse(message);
