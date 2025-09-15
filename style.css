@@ -11,7 +11,7 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: 'Garamond', 'Segoe UI', 'San Francisco', Arial, sans-serif;
-    background: url('merlenebg.jpg') center center/cover no-repeat fixed;
+    background: linear-gradient(90deg, #111 0%, #444 100%);
     overflow: hidden;
     position: relative;
 }
@@ -20,19 +20,33 @@ body {
     display: none !important;
 }
 
+/* Remove previous background image and title */
 .merlene-title {
+    display: none !important;
+}
+
+/* Wavy spinning circle for AI interaction */
+.wavy-spinner {
     position: absolute;
     top: 50%;
-    left: 10vw;
-    transform: translateY(-50%);
-    font-family: 'Garamond', serif;
-    font-size: 4rem;
-    font-weight: bold;
-    color: #fff;
-    letter-spacing: 0.1em;
-    text-shadow: 0 2px 16px #000a, 0 0 32px #00aeff99;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
     z-index: 20;
-    user-select: none;
+    display: none;
+}
+.wavy-spinner.active {
+    display: block;
+}
+.wavy-spinner svg {
+    width: 100%;
+    height: 100%;
+    animation: spinWavy 1.2s linear infinite;
+}
+@keyframes spinWavy {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .assistant-card {

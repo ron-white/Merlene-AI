@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MERLENE - Virtual Assistant</title>
+    <title>MERLENE AI Assistant</title>
     <link rel="shortcut icon" href="avatar.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -13,25 +13,18 @@
 </head>
 
 <body>
-    <!-- Animated SVG background for Cortana/Siri effect -->
-    <div class="ai-bg">
-        <svg width="100%" height="100%" viewBox="0 0 1920 1080" preserveAspectRatio="none" class="ai-bg-svg">
-            <defs>
-                <radialGradient id="cortanaGradient" cx="50%" cy="50%" r="60%">
-                    <stop offset="0%" stop-color="#00aeff" stop-opacity="0.7" />
-                    <stop offset="60%" stop-color="#7800ff" stop-opacity="0.4" />
-                    <stop offset="100%" stop-color="#181c26" stop-opacity="1" />
-                </radialGradient>
-            </defs>
-            <ellipse cx="960" cy="540" rx="700" ry="350" fill="url(#cortanaGradient)" filter="url(#glow)" />
+    <!-- Wavy spinning circle for AI interaction -->
+    <div class="wavy-spinner" id="wavySpinner">
+        <svg viewBox="0 0 180 180">
+            <path d="M90,20
+                C120,20 160,60 160,90
+                C160,120 120,160 90,160
+                C60,160 20,120 20,90
+                C20,60 60,20 90,20
+                Z"
+                fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" />
         </svg>
-        <div class="siri-circles">
-            <div class="siri-circle blue"></div>
-            <div class="siri-circle purple"></div>
-            <div class="siri-circle white"></div>
-        </div>
     </div>
-
     <!-- Glassmorphic assistant card -->
     <div class="assistant-card">
         <div class="avatar-container">
@@ -47,9 +40,28 @@
         <div id="loading" class="loading-spinner" style="display:none;"></div>
     </div>
 
-    <div class="merlene-title">MERLENE</div>
+    <script>
+        // Show/hide wavy spinner when AI is interacting
+        function showWavySpinner() {
+            document.getElementById('wavySpinner').classList.add('active');
+        }
 
-    <script src="app.js"></script>
+        function hideWavySpinner() {
+            document.getElementById('wavySpinner').classList.remove('active');
+        }
+        // Example: show spinner when loading
+        document.addEventListener('DOMContentLoaded', function () {
+            const loading = document.getElementById('loading');
+            const observer = new MutationObserver(() => {
+                if (loading.style.display !== 'none') {
+                    showWavySpinner();
+                } else {
+                    hideWavySpinner();
+                }
+            });
+            observer.observe(loading, { attributes: true, attributeFilter: ['style'] });
+        });
+    </script>
 </body>
 
 </html>
