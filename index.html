@@ -3,64 +3,72 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MERLENE AI Assistant</title>
-    <link rel="shortcut icon" href="avatar.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
 </head>
 
 <body>
-    <!-- Wavy spinning circle for AI interaction -->
-    <div class="wavy-spinner" id="wavySpinner">
-        <svg viewBox="0 0 180 180">
-            <path d="M90,20
-                C120,20 160,60 160,90
-                C160,120 120,160 90,160
-                C60,160 20,120 20,90
-                C20,60 60,20 90,20
-                Z"
-                fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" />
-        </svg>
+    <div class="mic-btn-container">
+        <button class="mic-btn" id="micBtn" title="Activate Microphone">
+            <span id="micIcon">🎤</span>
+        </button>
+        <div class="speech-text" id="speechText"></div>
     </div>
-    <!-- Glassmorphic assistant card -->
-    <div class="assistant-card">
-        <div class="avatar-container">
-            <img src="avatar.png" alt="MERLENE Avatar" class="avatar">
-            <div class="listening-indicator">
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-            </div>
-        </div>
-        <div class="content"></div>
-        <button class="talk">Talk</button>
-        <div id="loading" class="loading-spinner" style="display:none;"></div>
-    </div>
-
     <script>
-        // Show/hide wavy spinner when AI is interacting
-        function showWavySpinner() {
-            document.getElementById('wavySpinner').classList.add('active');
-        }
+        // Microphone button logic
+        const micBtn = document.getElementById('micBtn');
+        const speechText = document.getElementById('speechText');
+        const micIcon = document.getElementById('micIcon');
+        let listening = false;
 
-        function hideWavySpinner() {
-            document.getElementById('wavySpinner').classList.remove('active');
+        // Speech recognition setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+
+        recognition.onstart = function () {
+            listening = true;
+            micBtn.classList.add('active');
+            micIcon.textContent = '🔴';
+            speechText.textContent = 'Listening...';
+        };
+        recognition.onend = function () {
+            listening = false;
+            micBtn.classList.remove('active');
+            micIcon.textContent = '🎤';
+        };
+        recognition.onresult = function (event) {
+            let transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                transcript += event.results[i][0].transcript;
+            }
+            speechText.textContent = transcript;
+            if (event.results[event.results.length - 1].isFinal) {
+                window.speechSynthesis.cancel();
+                takeCommand(transcript.toLowerCase());
+            }
+        };
+
+        micBtn.onclick = function () {
+            if (!listening) {
+                recognition.start();
+            } else {
+                recognition.stop();
+            }
+        };
+
+        // AI response will be spoken and displayed
+        function speak(text) {
+            speechText.textContent = text;
+            const text_speak = new SpeechSynthesisUtterance(text);
+            text_speak.rate = 1;
+            text_speak.volume = 1;
+            text_speak.pitch = 1;
+            window.speechSynthesis.speak(text_speak);
         }
-        // Example: show spinner when loading
-        document.addEventListener('DOMContentLoaded', function () {
-            const loading = document.getElementById('loading');
-            const observer = new MutationObserver(() => {
-                if (loading.style.display !== 'none') {
-                    showWavySpinner();
-                } else {
-                    hideWavySpinner();
-                }
-            });
-            observer.observe(loading, { attributes: true, attributeFilter: ['style'] });
-        });
+        // ...existing JS logic for takeCommand, etc. can be included here...
     </script>
 </body>
 

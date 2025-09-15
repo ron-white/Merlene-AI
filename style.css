@@ -11,7 +11,7 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: 'Garamond', 'Segoe UI', 'San Francisco', Arial, sans-serif;
-    background: linear-gradient(90deg, #111 0%, #444 100%);
+    background: linear-gradient(90deg, #050505 0%, #222 100%);
     overflow: hidden;
     position: relative;
 }
@@ -25,203 +25,52 @@ body {
     display: none !important;
 }
 
-/* Wavy spinning circle for AI interaction */
-.wavy-spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 180px;
-    height: 180px;
-    z-index: 20;
-    display: none;
-}
-.wavy-spinner.active {
-    display: block;
-}
-.wavy-spinner svg {
-    width: 100%;
-    height: 100%;
-    animation: spinWavy 1.2s linear infinite;
-}
-@keyframes spinWavy {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+/* Remove all previous UI elements */
+.merlene-title, .assistant-card, .wavy-spinner, .ai-bg, .siri-circles, .cortana-ring, .avatar-container, .loading-spinner, .listening-indicator {
+    display: none !important;
 }
 
-.assistant-card {
-    position: absolute;
-    top: 50%; left: 55vw;
-    transform: translate(-50%, -50%);
-    background: rgba(34, 40, 59, 0.7);
-    box-shadow: 0 8px 32px 0 rgba(0, 174, 255, 0.25), 0 1.5px 8px 0 #7800ff44;
-    border-radius: 32px;
-    padding: 48px 32px 32px 32px;
-    min-width: 350px;
-    max-width: 90vw;
-    min-height: 420px;
-    z-index: 10;
-    backdrop-filter: blur(16px) saturate(180%);
+/* Microphone button at bottom center */
+.mic-btn-container {
+    position: fixed;
+    left: 50%;
+    bottom: 48px;
+    transform: translateX(-50%);
+    z-index: 100;
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: box-shadow 0.3s;
 }
-.avatar-container {
-    position: relative;
-    margin-bottom: 24px;
-}
-.avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    box-shadow: 0 0 32px 8px #00aeff99, 0 0 16px 4px #7800ff99;
-    border: 4px solid #fff2;
-    background: #232a3b;
-}
-.listening-indicator {
-    position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 8px;
-}
-.listening-indicator .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #00aeff 60%, #7800ff 100%);
-    box-shadow: 0 0 8px 2px #00aeff99;
-    opacity: 0.7;
-    animation: listen-dot 1.2s infinite alternate;
-}
-.listening-indicator .dot:nth-child(2) {
-    animation-delay: 0.4s;
-}
-.listening-indicator .dot:nth-child(3) {
-    animation-delay: 0.8s;
-}
-@keyframes listen-dot {
-    0% { opacity: 0.7; transform: scale(1); }
-    100% { opacity: 1; transform: scale(1.3); }
-}
-.content {
-    color: #fff;
-    font-size: 1.3rem;
-    text-align: center;
-    margin-bottom: 32px;
-    min-height: 48px;
-    max-width: 90vw;
-    word-break: break-word;
-    z-index: 2;
-}
-.talk {
+.mic-btn {
     background: linear-gradient(90deg, #00aeff 0%, #7800ff 100%);
     color: #fff;
     border: none;
-    border-radius: 24px;
-    padding: 16px 40px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    box-shadow: 0 2px 12px 0 #00aeff44;
-    cursor: pointer;
-    transition: background 0.3s, box-shadow 0.3s;
-    margin-bottom: 16px;
-}
-.talk:hover {
-    background: linear-gradient(90deg, #7800ff 0%, #00aeff 100%);
-    box-shadow: 0 4px 24px 0 #7800ff44;
-}
-.loading-spinner {
-    margin-top: 16px;
-    width: 40px;
-    height: 40px;
-    border: 4px solid #00aeff44;
-    border-top: 4px solid #7800ff;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-    z-index: 2;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Search Results Display */
-.search-results {
-    display: none;
-    position: fixed;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 70%;
-    background: rgba(0, 20, 40, 0.95);
-    border: 2px solid #00bcd4;
-    border-radius: 15px;
-    z-index: 1000;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-}
-
-.results-header {
-    background: #00bcd4;
-    color: #000;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.results-header h2 {
-    margin: 0;
-    font-size: 20px;
-}
-
-.close-results {
-    background: none;
-    border: none;
-    font-size: 24px;
+    width: 80px;
+    height: 80px;
+    font-size: 2.2rem;
+    box-shadow: 0 4px 32px 0 #00aeff44, 0 1.5px 8px 0 #7800ff44;
     cursor: pointer;
-    color: #000;
-    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, box-shadow 0.3s;
+    outline: none;
 }
-
-.close-results:hover {
+.mic-btn.active {
+    background: linear-gradient(90deg, #7800ff 0%, #00aeff 100%);
+    box-shadow: 0 8px 48px 0 #7800ff88;
+}
+.speech-text {
+    margin-top: 24px;
     color: #fff;
-}
-
-.results-content {
-    padding: 20px;
-    height: calc(100% - 70px);
-    overflow-y: auto;
-    color: #aed0d0;
-}
-
-.search-item {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: rgba(0, 188, 212, 0.1);
-    border-radius: 8px;
-    border-left: 4px solid #00bcd4;
-}
-
-.search-item h3 {
-    color: #00bcd4;
-    margin-bottom: 8px;
-    font-size: 16px;
-}
-
-.search-item p {
-    color: #aed0d0;
-    line-height: 1.5;
-    margin-bottom: 8px;
-}
-
-.search-item .source {
-    color: #324042;
-    font-size: 12px;
-    font-style: italic;
+    font-size: 1.3rem;
+    text-align: center;
+    min-height: 32px;
+    max-width: 90vw;
+    word-break: break-word;
+    font-family: 'Garamond', serif;
+    letter-spacing: 0.05em;
 }
 
 /* Loading Indicator */
