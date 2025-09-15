@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MERLENE AI Assistant</title>
     <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
 </head>
 
 <body>
@@ -47,7 +48,9 @@
             speechText.textContent = transcript;
             if (event.results[event.results.length - 1].isFinal) {
                 window.speechSynthesis.cancel();
-                takeCommand(transcript.toLowerCase());
+                if (typeof takeCommand === 'function') {
+                    takeCommand(transcript.toLowerCase());
+                }
             }
         };
 
@@ -58,17 +61,6 @@
                 recognition.stop();
             }
         };
-
-        // AI response will be spoken and displayed
-        function speak(text) {
-            speechText.textContent = text;
-            const text_speak = new SpeechSynthesisUtterance(text);
-            text_speak.rate = 1;
-            text_speak.volume = 1;
-            text_speak.pitch = 1;
-            window.speechSynthesis.speak(text_speak);
-        }
-        // ...existing JS logic for takeCommand, etc. can be included here...
     </script>
 </body>
 
