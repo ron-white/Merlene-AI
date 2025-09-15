@@ -2,8 +2,10 @@ const btn = document.querySelector('.talk');
 const content = document.querySelector('.content');
 
 function speak(text) {
+    // Update speechText for new UI
+    const speechTextDiv = document.getElementById('speechText');
+    if (speechTextDiv) speechTextDiv.textContent = text;
     const text_speak = new SpeechSynthesisUtterance(text);
-
     text_speak.rate = 1;
     text_speak.volume = 1;
     text_speak.pitch = 1;
@@ -105,8 +107,8 @@ async function displaySearchResults(query) {
 
 // Function to simulate fetching world information
 async function fetchWorldInformation(query) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Reduce API delay for faster response
+    await new Promise(resolve => setTimeout(resolve, 300));
     
     // Comprehensive knowledge base simulation
     const knowledgeBase = {
