@@ -11,6 +11,9 @@
 
 <body>
     <div class="mic-btn-container">
+        <div class="response-window" id="responseWindow">
+            <div class="response-history" id="responseHistory"></div>
+        </div>
         <button class="mic-btn" id="micBtn" title="Activate Microphone">
             <span id="micIcon">🎤</span>
         </button>
@@ -60,6 +63,45 @@
             } else {
                 recognition.stop();
             }
+        };
+
+        // Typing effect for AI response
+        function typeResponse(text, callback) {
+            const responseWindow = document.getElementById('responseWindow');
+            let i = 0;
+            responseWindow.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    responseWindow.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 18);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+
+        // Save response to history
+        function addToHistory(text) {
+            const historyDiv = document.getElementById('responseHistory');
+            const entry = document.createElement('div');
+            entry.className = 'history-entry';
+            entry.textContent = text;
+            historyDiv.appendChild(entry);
+            historyDiv.scrollTop = historyDiv.scrollHeight;
+        }
+
+        // Override speak to use typing effect and history
+        window.speak = function(text) {
+            typeResponse(text, function() {
+                addToHistory(text);
+            });
+            const utter = new SpeechSynthesisUtterance(text);
+            utter.rate = 1;
+            utter.volume = 1;
+            utter.pitch = 1;
+            window.speechSynthesis.speak(utter);
         };
     </script>
 </body>

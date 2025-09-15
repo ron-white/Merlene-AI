@@ -90,8 +90,28 @@ async function displaySearchResults(query) {
     }
 }
 
-// Function to simulate fetching world information
+// Enhance world knowledge: Use Wikipedia API for general questions
 async function fetchWorldInformation(query) {
+    // Try Wikipedia API for general world questions
+    if (query && query.length > 2) {
+        try {
+            const apiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+            const response = await fetch(apiUrl);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.extract) {
+                    return [{
+                        title: data.title,
+                        description: data.extract,
+                        source: 'Wikipedia'
+                    }];
+                }
+            }
+        } catch (e) {
+            // Ignore and fallback
+        }
+    }
+    
     // Reduce API delay for faster response
     await new Promise(resolve => setTimeout(resolve, 300));
     
